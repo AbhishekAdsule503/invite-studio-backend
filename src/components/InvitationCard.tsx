@@ -2178,6 +2178,7 @@ export const InvitationCard = React.forwardRef<
     slug === "pink-lotus-ganesh-wedding" ||
     (slug.includes("pink") && slug.includes("lotus")) ||
     themeKey === "lotus-ganesh" ||
+    themeKey === "lotus" ||
     title.includes("pink lotus");
 
   // 2. Aqua Floral Royal Engagement

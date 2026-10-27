@@ -403,7 +403,7 @@ export default function DashboardPage() {
         }}
       >
         <div
-          className="container"
+          className="container dashboard-header-inner"
           style={{
             height: 74,
             display: "flex",
@@ -475,7 +475,7 @@ export default function DashboardPage() {
       {/* ================= MAIN DASHBOARD BODY ================= */}
       <main className="container" style={{ paddingTop: 36, paddingBottom: 80 }}>
         {/* Welcome & Actions Row */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 20, marginBottom: 32 }}>
+        <div className="dashboard-welcome-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: 20, marginBottom: 32 }}>
           <div>
             <div className="section-eyebrow dark" style={{ marginBottom: 6 }}>
               <Sparkles size={13} />
@@ -496,7 +496,7 @@ export default function DashboardPage() {
                 setShowEditor(true);
               }
             }}
-            className="btn btn-primary"
+            className="btn btn-primary dashboard-welcome-btn"
             style={{ padding: "12px 22px" }}
           >
             <Plus size={18} />
@@ -548,6 +548,7 @@ export default function DashboardPage() {
 
         {/* Quick Stats Strip */}
         <div
+          className="dashboard-stats-grid"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
@@ -583,21 +584,24 @@ export default function DashboardPage() {
         {/* ================= WORKSPACE EDITOR (COLLAPSIBLE / LIVE) ================= */}
         {showEditor && (
           <section
+            className="dashboard-editor-card"
             style={{
               backgroundColor: "var(--pure-white)",
               borderRadius: 24,
               border: "1px solid var(--border-gold)",
               boxShadow: "var(--shadow-lg)",
-              padding: "clamp(24px, 4vw, 36px)",
+              padding: "clamp(20px, 3.5vw, 36px)",
               marginBottom: 44,
+              width: "100%",
+              minWidth: 0,
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, borderBottom: "1px solid var(--light-border)", paddingBottom: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, borderBottom: "1px solid var(--light-border)", paddingBottom: 16, flexWrap: "wrap", gap: 12 }}>
               <div>
                 <span className="badge badge-gold" style={{ marginBottom: 6 }}>
                   {editingId ? "Editing Invitation" : "Design Mode"}
                 </span>
-                <h2 style={{ fontSize: "1.6rem", color: "var(--rich-burgundy)", margin: 0 }}>
+                <h2 style={{ fontSize: "clamp(1.3rem, 2.5vw, 1.6rem)", color: "var(--rich-burgundy)", margin: 0 }}>
                   {editingId ? "Update Invitation Suite" : "Create New Invitation"}
                 </h2>
               </div>
@@ -614,17 +618,9 @@ export default function DashboardPage() {
               </button>
             </div>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "minmax(320px, 1fr) minmax(460px, 1.25fr)",
-                gap: 40,
-                alignItems: "start",
-              }}
-              className="dashboard-editor-grid"
-            >
+            <div className="dashboard-editor-grid">
               {/* Left Column: Form Fields */}
-              <form onSubmit={save} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
+              <form onSubmit={save} className="dashboard-editor-form" style={{ display: "flex", flexDirection: "column", gap: 18 }}>
                 {/* Occasion Template Quick-Pick Bar */}
                 {templates.length > 0 && !editingId && (
                   <div
@@ -633,13 +629,15 @@ export default function DashboardPage() {
                       borderRadius: 16,
                       backgroundColor: "var(--warm-ivory)",
                       border: "1px solid var(--border-gold)",
+                      width: "100%",
+                      minWidth: 0,
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10, fontSize: "0.78rem", fontWeight: 700, color: "var(--rich-burgundy)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
                       <Sparkles size={14} color="var(--champagne-gold)" />
                       <span>Start with an Occasion Design Suite</span>
                     </div>
-                    <div style={{ display: "flex", gap: 8, overflowX: "auto", paddingBottom: 6 }}>
+                    <div className="dashboard-quickpick-container" style={{ display: "flex", gap: 8, paddingBottom: 6 }}>
                       {templates.map((tpl) => (
                         <button
                           key={tpl.id}
@@ -678,7 +676,7 @@ export default function DashboardPage() {
                   />
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div className="dashboard-2col-row">
                   <div>
                     <label className="studio-label">Occasion *</label>
                     <select
@@ -707,7 +705,7 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div className="dashboard-2col-row">
                   <div>
                     <label className="studio-label">Event Date</label>
                     <input
@@ -766,7 +764,7 @@ export default function DashboardPage() {
                   />
                 </div>
 
-                <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
+                <div className="dashboard-editor-actions" style={{ display: "flex", gap: 12, marginTop: 8 }}>
                   <button type="submit" disabled={busy} className="btn btn-primary" style={{ padding: "14px 28px" }}>
                     {busy ? (
                       <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
@@ -792,16 +790,19 @@ export default function DashboardPage() {
 
               {/* Right Column: Full-Scale Luxury Live Canvas Preview */}
               <div
+                className="dashboard-editor-preview"
                 style={{
                   backgroundColor: "var(--ivory-surface)",
                   borderRadius: 24,
-                  padding: "clamp(24px, 4vw, 36px) clamp(16px, 3vw, 28px)",
+                  padding: "clamp(20px, 3.5vw, 36px) clamp(14px, 2.5vw, 28px)",
                   border: "1px solid var(--border-gold)",
                   boxShadow: "inset 0 2px 8px rgba(58, 20, 36, 0.04)",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   width: "100%",
+                  minWidth: 0,
+                  boxSizing: "border-box",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%", maxWidth: 580, marginBottom: 16 }}>
@@ -813,7 +814,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
 
-                {/* Substantially Larger Centered Invitation Card (85-95% usable width, 480-580px desktop) */}
+                {/* Substantially Larger Centered Invitation Card */}
                 <div
                   style={{
                     width: "100%",
@@ -821,6 +822,8 @@ export default function DashboardPage() {
                     display: "flex",
                     justifyContent: "center",
                     transition: "transform 0.25s ease",
+                    minWidth: 0,
+                    overflow: "hidden",
                   }}
                 >
                   <InvitationCard
@@ -860,7 +863,7 @@ export default function DashboardPage() {
                     )}
                   </button>
 
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                  <div className="preview-share-actions" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                     <button
                       type="button"
                       onClick={() =>
@@ -987,13 +990,7 @@ export default function DashboardPage() {
             </div>
           ) : (
             /* Cards Grid */
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(330px, 1fr))",
-                gap: 24,
-              }}
-            >
+            <div className="dashboard-collection-grid">
               {filteredItems.map((item) => {
                 const palette = themePalettes[item.theme] || themePalettes.wine;
                 const formattedDate = item.eventDate
@@ -1201,8 +1198,96 @@ export default function DashboardPage() {
 
       {/* Responsive layout styles */}
       <style jsx global>{`
-        @media (max-width: 860px) {
+        /* Dashboard Container & Grid Responsiveness */
+        .dashboard-editor-grid {
+          display: grid;
+          grid-template-columns: minmax(320px, 1fr) minmax(400px, 1.2fr);
+          gap: 36px;
+          align-items: start;
+          width: 100%;
+          min-width: 0;
+        }
+
+        .dashboard-editor-form {
+          min-width: 0;
+          width: 100%;
+        }
+
+        .dashboard-editor-preview {
+          min-width: 0;
+          width: 100%;
+        }
+
+        .dashboard-2col-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+          min-width: 0;
+          width: 100%;
+        }
+
+        .dashboard-quickpick-container {
+          width: 100%;
+          min-width: 0;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
+        }
+
+        .dashboard-collection-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 24px;
+          width: 100%;
+        }
+
+        /* Large Tablet / Small Laptop Breakpoint (<= 1040px) */
+        @media (max-width: 1040px) {
           .dashboard-editor-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+          .dashboard-editor-preview {
+            margin-top: 10px;
+          }
+        }
+
+        /* Tablet & Mobile Breakpoint (<= 640px) */
+        @media (max-width: 640px) {
+          .dashboard-header-inner {
+            height: 64px !important;
+          }
+          .dashboard-welcome-row {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 16px !important;
+          }
+          .dashboard-welcome-btn {
+            width: 100% !important;
+          }
+          .dashboard-stats-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .dashboard-editor-card {
+            padding: 16px !important;
+            border-radius: 16px !important;
+          }
+          .dashboard-2col-row {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .dashboard-collection-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .dashboard-editor-actions {
+            flex-direction: column !important;
+          }
+          .dashboard-editor-actions button {
+            width: 100% !important;
+          }
+          .preview-share-actions {
             grid-template-columns: 1fr !important;
           }
         }

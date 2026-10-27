@@ -381,6 +381,7 @@ export default function HomePage() {
 
   // Live builder modal state
   const [showBuilder, setShowBuilder] = useState(false);
+  const [builderTab, setBuilderTab] = useState<"edit" | "preview">("edit");
   const [previewTemplate, setPreviewTemplate] = useState<Template | null>(null);
   const [form, setForm] = useState({
     occasion: "Wedding",
@@ -1024,16 +1025,16 @@ export default function HomePage() {
                 template.theme === "wine"
                   ? "#3A1424"
                   : template.theme === "midnight"
-                  ? "#0E1A2B"
-                  : template.theme === "blush"
-                  ? "#F8EEEA"
-                  : template.theme === "champagne"
-                  ? "#FCF8F2"
-                  : template.theme === "heritage"
-                  ? "#FDF4ED"
-                  : template.theme === "rose"
-                  ? "#F9ECEF"
-                  : "#FAF6EF";
+                    ? "#0E1A2B"
+                    : template.theme === "blush"
+                      ? "#F8EEEA"
+                      : template.theme === "champagne"
+                        ? "#FCF8F2"
+                        : template.theme === "heritage"
+                          ? "#FDF4ED"
+                          : template.theme === "rose"
+                            ? "#F9ECEF"
+                            : "#FAF6EF";
 
               return (
                 <div
@@ -1467,12 +1468,13 @@ export default function HomePage() {
             {/* Modal Header */}
             <div
               style={{
-                padding: "20px 28px",
+                padding: "16px 24px",
                 borderBottom: "1px solid var(--light-border)",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
                 backgroundColor: "var(--warm-ivory)",
+                flexShrink: 0,
               }}
             >
               <div>
@@ -1480,7 +1482,7 @@ export default function HomePage() {
                   <Sparkles size={12} />
                   <span>Interactive Invitation Studio</span>
                 </div>
-                <h3 style={{ fontSize: "1.45rem", color: "var(--rich-burgundy)", margin: "4px 0 0" }}>
+                <h3 style={{ fontSize: "clamp(1.2rem, 3vw, 1.45rem)", color: "var(--rich-burgundy)", margin: "4px 0 0" }}>
                   Design Your Invitation
                 </h3>
               </div>
@@ -1497,23 +1499,52 @@ export default function HomePage() {
                   placeItems: "center",
                   color: "var(--rich-burgundy)",
                 }}
+                aria-label="Close dialog"
               >
                 <X size={18} />
               </button>
             </div>
 
+            {/* Mobile Tab Switcher (Visible only on mobile/tablet <= 900px) */}
+            <div className="builder-mobile-tabs" style={{ display: "none" }}>
+              <button
+                type="button"
+                onClick={() => setBuilderTab("edit")}
+                className={`builder-tab-btn ${builderTab === "edit" ? "active" : ""}`}
+              >
+                1. Edit Details
+              </button>
+              <button
+                type="button"
+                onClick={() => setBuilderTab("preview")}
+                className={`builder-tab-btn ${builderTab === "preview" ? "active" : ""}`}
+              >
+                2. Live Preview ✨
+              </button>
+            </div>
+
             {/* Modal Body: Two Columns */}
             <div
+              className={`builder-modal-grid builder-active-tab-${builderTab}`}
               style={{
                 display: "grid",
                 gridTemplateColumns: "1.1fr 0.9fr",
                 overflowY: "auto",
                 flex: 1,
+                minHeight: 0,
               }}
-              className="builder-modal-grid"
             >
               {/* Left Column: Form Controls */}
-              <div style={{ padding: "28px 32px", display: "flex", flexDirection: "column", gap: 16 }}>
+              <div
+                className="builder-left-col"
+                style={{
+                  padding: "clamp(16px, 3vw, 32px)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 16,
+                  overflowY: "auto",
+                }}
+              >
                 <div>
                   <label className="studio-label">Occasion</label>
                   <select
@@ -1701,15 +1732,18 @@ export default function HomePage() {
 
               {/* Right Column: Live Luxury Preview Canvas */}
               <div
+                className="builder-right-col"
                 style={{
                   backgroundColor: "var(--ivory-surface)",
                   borderLeft: "1px solid var(--light-border)",
-                  padding: "32px 24px",
+                  padding: "clamp(20px, 3vw, 32px) clamp(14px, 2.5vw, 24px)",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "flex-start",
                   overflowY: "auto",
+                  minWidth: 0,
+                  width: "100%",
                 }}
               >
                 <div style={{ fontSize: "0.72rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--champagne-gold)", marginBottom: 16, fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}>
@@ -1718,7 +1752,7 @@ export default function HomePage() {
                   <Sparkles size={13} />
                 </div>
 
-                <div style={{ width: "100%", maxWidth: 520, display: "flex", justifyContent: "center" }}>
+                <div style={{ width: "100%", maxWidth: 520, display: "flex", justifyContent: "center", minWidth: 0 }}>
                   <InvitationCard
                     ref={builderCardRef}
                     data={{
@@ -1836,6 +1870,37 @@ export default function HomePage() {
 
       {/* Global CSS Responsive Helpers */}
       <style jsx global>{`
+        .builder-mobile-tabs {
+          display: none;
+          grid-template-columns: 1fr 1fr;
+          border-bottom: 1px solid var(--light-border);
+          background-color: var(--warm-ivory);
+          padding: 8px 12px;
+          gap: 8px;
+        }
+
+        .builder-tab-btn {
+          padding: 10px 14px;
+          border-radius: 9999px;
+          border: 1px solid var(--light-border);
+          background-color: var(--pure-white);
+          color: var(--charcoal);
+          font-weight: 600;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .builder-tab-btn.active {
+          background-color: var(--rich-burgundy);
+          color: var(--pure-white);
+          border-color: var(--rich-burgundy);
+          box-shadow: 0 2px 8px rgba(101, 30, 50, 0.2);
+        }
+
         @media (max-width: 900px) {
           .desktop-nav {
             display: none !important;
@@ -1858,8 +1923,23 @@ export default function HomePage() {
           .hero-grid .hero-actions {
             justify-content: center;
           }
+          .builder-mobile-tabs {
+            display: grid !important;
+          }
           .builder-modal-grid {
             grid-template-columns: 1fr !important;
+            display: block !important;
+          }
+          .builder-modal-grid.builder-active-tab-edit .builder-right-col {
+            display: none !important;
+          }
+          .builder-modal-grid.builder-active-tab-preview .builder-left-col {
+            display: none !important;
+          }
+          .builder-right-col {
+            border-left: none !important;
+            border-top: 1px solid var(--light-border);
+            padding: 20px 14px !important;
           }
         }
       `}</style>
