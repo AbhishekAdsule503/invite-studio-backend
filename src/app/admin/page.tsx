@@ -144,7 +144,7 @@ export default function AdminPage() {
 
   const showToast = (msg: string) => {
     setSuccess(msg);
-    setTimeout(() => setSuccess(null as any), 3500);
+    setTimeout(() => setSuccess(""), 3500);
   };
 
   async function loadOverview() {
@@ -767,7 +767,7 @@ export default function AdminPage() {
                       className="studio-input"
                       style={{ padding: "8px 12px", fontSize: "0.85rem", minWidth: 140 }}
                       value={statusFilter}
-                      onChange={(e) => setStatusFilter(e.target.value as any)}
+                      onChange={(e) => setStatusFilter(e.target.value as "ALL" | "ACTIVE" | "SUSPENDED")}
                     >
                       <option value="ALL">All Statuses</option>
                       <option value="ACTIVE">Active Only</option>
